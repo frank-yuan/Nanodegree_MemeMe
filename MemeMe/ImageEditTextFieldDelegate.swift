@@ -9,10 +9,8 @@ import Foundation
 import UIKit
 
 class ImageEditTextFieldDelegate: NSObject, UITextFieldDelegate {
-    static var lastEditedTextfield:UITextField!
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        ImageEditTextFieldDelegate.lastEditedTextfield = textField
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -20,6 +18,5 @@ class ImageEditTextFieldDelegate: NSObject, UITextFieldDelegate {
     }
     func textFieldDidEndEditing(textField: UITextField) {
         textField.resignFirstResponder()
-        ImageEditTextFieldDelegate.lastEditedTextfield = nil
     }
 }

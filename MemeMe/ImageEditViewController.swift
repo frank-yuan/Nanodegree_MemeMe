@@ -156,7 +156,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        if (bottomTextField == ImageEditTextFieldDelegate.lastEditedTextfield) {
+        if (bottomTextField.editing) {
             view.frame.origin.y = viewOriginY - getKeyboardHeight(notification)
         }
     }
