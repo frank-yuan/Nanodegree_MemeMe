@@ -64,7 +64,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="e7b-U2-Qsb"/>
                                     <barButtonItem systemItem="camera" id="PPv-l8-7ha">
                                         <connections>
-                                            <action selector="onTakePhoto:" destination="BYZ-38-t0r" id="4z1-eY-4CW"/>
+                                            <action selector="onPickImage:" destination="BYZ-38-t0r" id="I2w-ma-rzo"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="VTn-Ca-Qqi"/>

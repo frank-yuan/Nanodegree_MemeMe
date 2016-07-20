@@ -24,6 +24,12 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     var viewOriginY: CGFloat = 0
     
     // MARK: Constants
+    
+    enum ViewTags: Int {
+        case CameraButton = 1,
+        PhotoPickButton
+    }
+    
     let memeTextAttributes = [
     NSStrokeColorAttributeName : UIColor.blackColor(),
     NSForegroundColorAttributeName : UIColor.whiteColor(),
@@ -36,23 +42,17 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        viewOriginY = self.view.frame.origin.y
-        
+        viewOriginY = view.frame.origin.y
         
         // Touch anywhere to stop textfield input
         let tapper = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(_:)))
         tapper.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapper);
+        view.addGestureRecognizer(tapper);
         
-        topTextField.delegate = textDel
-        topTextField.defaultTextAttributes = memeTextAttributes;
-        topTextField.textAlignment = NSTextAlignment.Center
-        bottomTextField.delegate = textDel
-        bottomTextField.defaultTextAttributes = memeTextAttributes;
-        bottomTextField.textAlignment = NSTextAlignment.Center
+        setupTextField(topTextField)
+        setupTextField(bottomTextField)
         
-        
-        configureUI(meme != nil)
+        RefreshUI(meme != nil)
         if (meme != nil)
         {
             imageView.image = meme.image;
@@ -64,20 +64,20 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // Subscribe to keyboard notifications to allow the view to raise when necessary
-        self.subscribeToKeyboardNotifications()
+        subscribeToKeyboardNotifications()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.unsubscribeFromKeyboardNotifications()
+        unsubscribeFromKeyboardNotifications()
     }
     
     // MARK: ImagePicker Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
         imageView.image = image
         meme = nil
-        configureUI(true)
+        RefreshUI(true)
         
     }
     
@@ -88,21 +88,19 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     // MARK: Actions
     @IBAction func onPickImage(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        imagePicker.delegate = self
-        presentViewController(imagePicker, animated: true, completion: nil)
-    }
-    
-    @IBAction func onTakePhoto(sender: AnyObject) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+        if (ViewTags(rawValue: sender.tag) == ViewTags.CameraButton) {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+        }
+        else {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        }
         imagePicker.delegate = self
         presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func onCancel(sender: AnyObject) {
         imageView.image = nil
-        configureUI(false)
+        RefreshUI(false)
     }
 
     @IBAction func onShare(sender: AnyObject) {
@@ -111,21 +109,16 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
         
         saveMeme(memedImg)
         let vc = UIActivityViewController(activityItems: [memedImg], applicationActivities: nil)
-//        vc.completionWithItemsHandler = onShareCompleted;
-        self.presentViewController(vc, animated: true, completion: nil)
+        presentViewController(vc, animated: true, completion: nil)
     }
-    
-//    func onShareCompleted(str:String?, succeed:Bool, item:[AnyObject]?, error:NSError?)
-//    {
-//    }
     
     // MARK: Private methods
     func generateMemedImage() -> UIImage {
         topToolbar.hidden = true;
         bottomToolBar.hidden = true;
         // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawViewHierarchyInRect(self.view.frame,
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawViewHierarchyInRect(view.frame,
                                      afterScreenUpdates: true)
         let memedImage : UIImage =
             UIGraphicsGetImageFromCurrentImageContext()
@@ -136,7 +129,13 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
         return memedImage
     }
     
-    func configureUI(hasImage:Bool){
+    func setupTextField(textField:UITextField) {
+        textField.delegate = textDel
+        textField.defaultTextAttributes = memeTextAttributes;
+        textField.textAlignment = NSTextAlignment.Center
+    }
+    
+    func RefreshUI(hasImage:Bool){
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
         actionButton.enabled = hasImage
         cancelButton.enabled = hasImage
@@ -158,12 +157,12 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     
     func keyboardWillShow(notification: NSNotification) {
         if (bottomTextField == ImageEditTextFieldDelegate.lastEditedTextfield) {
-            self.view.frame.origin.y = viewOriginY - getKeyboardHeight(notification)
+            view.frame.origin.y = viewOriginY - getKeyboardHeight(notification)
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.origin.y = viewOriginY
+        view.frame.origin.y = viewOriginY
     }
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
@@ -188,7 +187,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func handleSingleTap(sender:UITapGestureRecognizer){
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
 
 }
