@@ -10,10 +10,10 @@ import UIKit
 
 class Meme {
 
-    let topText: String
-    let bottomText: String
+    var topText: String
+    var bottomText: String
     let image: UIImage
-    let memedImage: UIImage
+    var memedImage: UIImage
     
     init(topText:String, bottomText:String, image: UIImage, memedImage: UIImage)
     {
