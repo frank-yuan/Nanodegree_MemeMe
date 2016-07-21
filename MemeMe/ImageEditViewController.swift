@@ -41,7 +41,8 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     // MARK: UIViewController overrides
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        navigationController?.navigationBarHidden = true
         viewOriginY = view.frame.origin.y
         
         // Touch anywhere to stop textfield input
@@ -55,7 +56,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
         RefreshUI(meme != nil)
         if (meme != nil)
         {
-            imageView.image = meme.image;
+            //imageView.image = meme.image;
             topTextField.text = meme.topText;
             bottomTextField.text = meme.bottomText;
         }
@@ -65,6 +66,15 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
         super.viewWillAppear(animated)
         // Subscribe to keyboard notifications to allow the view to raise when necessary
         subscribeToKeyboardNotifications()
+    }
+    
+    // I don't know why these lines will make the layout abnormal 
+    // if I put them in viewDidLoad or viewWillAppear
+    override func viewDidAppear(animated: Bool) {
+        if (meme != nil)
+        {
+            imageView.image = meme.image;
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -99,20 +109,30 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     @IBAction func onCancel(sender: AnyObject) {
-        imageView.image = nil
-        RefreshUI(false)
+        navigationController?.popViewControllerAnimated(true)
     }
 
     @IBAction func onShare(sender: AnyObject) {
         //generate a memed image
         let memedImg = generateMemedImage()
-        
-        saveMeme(memedImg)
+        updateMeme(memedImg)
         let vc = UIActivityViewController(activityItems: [memedImg], applicationActivities: nil)
+        vc.completionWithItemsHandler = onShareCompleted
         presentViewController(vc, animated: true, completion: nil)
     }
     
+    
     // MARK: Private methods
+    
+    func onShareCompleted(str:String?, succeed:Bool, item:[AnyObject]?, error:NSError?)
+    {
+        if (succeed)
+        {
+            storeCurrentMeme()
+            navigationController?.popViewControllerAnimated(true)
+        }
+    }
+    
     func generateMemedImage() -> UIImage {
         topToolbar.hidden = true;
         bottomToolBar.hidden = true;
@@ -138,7 +158,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     func RefreshUI(hasImage:Bool){
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
         actionButton.enabled = hasImage
-        cancelButton.enabled = hasImage
+        cancelButton.enabled = true
         
         topTextField.text = ""
         topTextField.hidden = !hasImage
@@ -171,7 +191,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
         return keyboardSize.CGRectValue().height
     }
     
-    func saveMeme(memedImg:UIImage) {
+    func updateMeme(memedImg:UIImage) {
         
         if (meme == nil) {
             meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, image: imageView.image!, memedImage: memedImg)
@@ -182,8 +202,13 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
             meme.memedImage = memedImg
         }
 
+    }
+    
+    func storeCurrentMeme() {
+        if (meme != nil) {
         (UIApplication.sharedApplication().delegate as!
             AppDelegate).memes.append(meme)
+        }
     }
     
     func handleSingleTap(sender:UITapGestureRecognizer){
