@@ -22,6 +22,7 @@ class MemeTableViewController: UITableViewController {
     }
     override func viewWillAppear(animated: Bool) {
         navigationController?.navigationBarHidden = false
+        tabBarController?.tabBar.hidden = false
         tableView.reloadData()
     }
     
@@ -30,7 +31,7 @@ class MemeTableViewController: UITableViewController {
         {
             if let ip = tableView.indexPathForSelectedRow {
                 if let vc = segue.destinationViewController as? ImageEditViewController {
-                    vc.meme = getMemeArray()[ip.row]
+                    vc.meme = Meme.getMemeArray()[ip.row]
                 }
             }
         }
@@ -38,12 +39,12 @@ class MemeTableViewController: UITableViewController {
     
     // MARK: TableView Delegates
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return getMemeArray().count
+        return Meme.getMemeArray().count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableViewCellIdentifier)
-        let meme = getMemeArray()[indexPath.row]
+        let meme = Meme.getMemeArray()[indexPath.row]
         cell?.imageView?.image = meme.memedImage
         cell?.textLabel!.text = meme.topText + "..." + meme.bottomText
         return cell!
@@ -54,9 +55,6 @@ class MemeTableViewController: UITableViewController {
     }
     
     // MARK: - Private functions
-    func getMemeArray() -> [Meme] {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
-    }
 
     func presentImageEditViewController() {
         performSegueWithIdentifier(tableViewSegueIdentifier, sender: self)

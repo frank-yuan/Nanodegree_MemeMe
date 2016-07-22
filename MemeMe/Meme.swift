@@ -14,4 +14,9 @@ struct Meme {
     var bottomText: String
     let image: UIImage
     var memedImage: UIImage
+    
+
+    static func getMemeArray() -> [Meme] {
+        return (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+    }
 }

@@ -42,7 +42,7 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBarHidden = true
+        
         viewOriginY = view.frame.origin.y
         
         // Touch anywhere to stop textfield input
@@ -64,6 +64,8 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBarHidden = true
+        tabBarController?.tabBar.hidden = true
         // Subscribe to keyboard notifications to allow the view to raise when necessary
         subscribeToKeyboardNotifications()
     }
