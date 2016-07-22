@@ -226,11 +226,11 @@
             </objects>
             <point key="canvasLocation" x="-973" y="-252"/>
         </scene>
-        <!--Item-->
+        <!--Navigation Controller-->
         <scene sceneID="KAR-hP-oUc">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="O6s-q1-btp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="Table" id="qXf-7f-eHC"/>
+                    <tabBarItem key="tabBarItem" title="" image="Table" id="qXf-7f-eHC"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="86S-C9-7km">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -245,11 +245,13 @@
             </objects>
             <point key="canvasLocation" x="227" y="63"/>
         </scene>
-        <!--Item-->
+        <!--Navigation Controller-->
         <scene sceneID="IC3-eG-99C">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NsH-D9-tRT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" selectedImage="Collection" id="WfR-zZ-fAO"/>
+                    <tabBarItem key="tabBarItem" image="Collection" id="WfR-zZ-fAO">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="JMx-ed-N8l">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
