@@ -13,14 +13,15 @@ class MemeCollectionViewController: UICollectionViewController {
     // MARK: Constant
     private let reuseIdentifier = "MemeCollectionCell"
     private let pushMemeDisplaySegueIdentifier = "pushMemeDisplay"
-    private let cellSpacing:CGFloat = 0.3
+    private let cellSpacing:CGFloat = 0.5
     
     // MARK: IBOutlet
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentImageEditViewController))
+        navigationItem.title = "Sent Memes"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,7 +40,7 @@ class MemeCollectionViewController: UICollectionViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == pushMemeDisplaySegueIdentifier) {
-            if let vc = segue.destinationViewController as? MemeDisplayViewController {
+            if let vc = segue.destinationViewController as? MemeDetailViewController {
                 vc.meme = Meme.getMemeArray()[(collectionView?.indexPathsForSelectedItems()![0].row)!]
             }
         }
@@ -69,16 +70,16 @@ class MemeCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
 
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        presentMemeDisplayViewController()
+        presentMemeDetailViewController()
     }
     
     // MARK: Private functions
     
-    func presentImageEditViewController(){
-        ImageEditViewController.pushImageEditViewController(self)
+    func presentMemeEditViewController(){
+        MemeEditViewController.pushMemeEditViewController(self)
     }
 
-    func presentMemeDisplayViewController() {
+    func presentMemeDetailViewController() {
         performSegueWithIdentifier(pushMemeDisplaySegueIdentifier, sender: self)
     }
     

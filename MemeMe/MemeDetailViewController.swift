@@ -1,5 +1,5 @@
 //
-//  MemeDisplayViewController.swift
+//  MemeDetailViewController.swift
 //  MemeMe
 //
 //  Created by Xuan Yuan (Frank) on 7/23/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MemeDisplayViewController: UIViewController {
+class MemeDetailViewController: UIViewController {
     
     var meme: Meme!
     @IBOutlet weak var imageView:UIImageView!
@@ -24,13 +24,13 @@ class MemeDisplayViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         
         super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentImageEditViewController))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
         
         navigationController?.navigationBarHidden = false
         tabBarController?.tabBar.hidden = true
     }
     
-    func presentImageEditViewController() {
-        ImageEditViewController.pushImageEditViewController(self, meme: meme)
+    func presentMemeEditViewController() {
+        MemeEditViewController.pushMemeEditViewController(self, meme: meme)
     }
 }

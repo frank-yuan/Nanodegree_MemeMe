@@ -18,7 +18,8 @@ class MemeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentImageEditViewController))
+        navigationItem.title = "Sent Memes"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
     }
     override func viewWillAppear(animated: Bool) {
         navigationController?.navigationBarHidden = false
@@ -30,7 +31,7 @@ class MemeTableViewController: UITableViewController {
         if (segue.identifier == tableViewSegueIdentifier)
         {
             if let ip = tableView.indexPathForSelectedRow {
-                if let vc = segue.destinationViewController as? MemeDisplayViewController {
+                if let vc = segue.destinationViewController as? MemeDetailViewController {
                     vc.meme = Meme.getMemeArray()[ip.row]
                 }
             }
@@ -43,24 +44,28 @@ class MemeTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(tableViewCellIdentifier)
+        let cell = tableView.dequeueReusableCellWithIdentifier(tableViewCellIdentifier)// as! MemeTableViewCell
         let meme = Meme.getMemeArray()[indexPath.row]
+        //cell.memeImage.image = meme.memedImage
+        cell?.imageView?.contentMode = UIViewContentMode.ScaleAspectFill
         cell?.imageView?.image = meme.memedImage
         cell?.textLabel!.text = meme.topText + "..." + meme.bottomText
-        
         return cell!
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        presentMemeDisplayViewController()
+        presentMemeDetailViewController()
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 100;
+    }
     // MARK: - Private functions
-    func presentImageEditViewController(){
-        ImageEditViewController.pushImageEditViewController(self)
+    func presentMemeEditViewController(){
+        MemeEditViewController.pushMemeEditViewController(self)
     }
     
-    func presentMemeDisplayViewController() {
+    func presentMemeDetailViewController() {
         performSegueWithIdentifier(tableViewSegueIdentifier, sender: self)
     }
 }

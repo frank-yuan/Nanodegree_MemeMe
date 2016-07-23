@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // MARK: Properties
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -169,8 +169,8 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     func subscribeToKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ImageEditViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ImageEditViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MemeEditViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func unsubscribeFromKeyboardNotifications() {
@@ -218,8 +218,8 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     // MARK: static helper function
-    static func pushImageEditViewController(currentViewController:UIViewController, meme:Meme? = nil) {
-        let vc = currentViewController.storyboard!.instantiateViewControllerWithIdentifier("ImageEditViewController") as! ImageEditViewController
+    static func pushMemeEditViewController(currentViewController:UIViewController, meme:Meme? = nil) {
+        let vc = currentViewController.storyboard!.instantiateViewControllerWithIdentifier("MemeEditViewController") as! MemeEditViewController
         vc.meme = meme
         currentViewController.navigationController?.pushViewController(vc, animated: true)
     }
