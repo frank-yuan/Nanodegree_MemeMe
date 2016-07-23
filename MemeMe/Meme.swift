@@ -63,6 +63,9 @@ struct Meme {
         return sharedMemes
     }
     
+    // TODO: this method is very very time consuming
+    // memes should be devided into single archive
+    // By the way, how can I run this method asynchronizely?
     static func saveMemeToStorage() {
         let fileName = getDocumentFilePath(savedFileName)
         let arrayToSave = NSMutableArray()
