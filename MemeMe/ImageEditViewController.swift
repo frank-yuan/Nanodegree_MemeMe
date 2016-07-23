@@ -208,9 +208,9 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     
     func storeCurrentMeme() {
         if (meme != nil) {
-        (UIApplication.sharedApplication().delegate as!
-            AppDelegate).memes.append(meme)
+            Meme.sharedMemes.append(meme)
         }
+        Meme.saveMemeToStorage()
     }
     
     func handleSingleTap(sender:UITapGestureRecognizer){
