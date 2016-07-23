@@ -12,7 +12,7 @@ class MemeTableViewController: UITableViewController {
 
     // MARK: Constants
     let tableViewCellIdentifier = "memeTableCell"
-    let tableViewSegueIdentifier = "showImageEdit"
+    let tableViewSegueIdentifier = "pushMemeDisplay"
     
     // MARK: ViewController overrides
     override func viewDidLoad() {
@@ -30,7 +30,7 @@ class MemeTableViewController: UITableViewController {
         if (segue.identifier == tableViewSegueIdentifier)
         {
             if let ip = tableView.indexPathForSelectedRow {
-                if let vc = segue.destinationViewController as? ImageEditViewController {
+                if let vc = segue.destinationViewController as? MemeDisplayViewController {
                     vc.meme = Meme.getMemeArray()[ip.row]
                 }
             }
@@ -47,16 +47,20 @@ class MemeTableViewController: UITableViewController {
         let meme = Meme.getMemeArray()[indexPath.row]
         cell?.imageView?.image = meme.memedImage
         cell?.textLabel!.text = meme.topText + "..." + meme.bottomText
+        
         return cell!
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        presentImageEditViewController()
+        presentMemeDisplayViewController()
     }
     
     // MARK: - Private functions
-
-    func presentImageEditViewController() {
+    func presentImageEditViewController(){
+        ImageEditViewController.pushImageEditViewController(self)
+    }
+    
+    func presentMemeDisplayViewController() {
         performSegueWithIdentifier(tableViewSegueIdentifier, sender: self)
     }
 }

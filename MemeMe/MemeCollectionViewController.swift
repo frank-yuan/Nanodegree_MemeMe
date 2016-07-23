@@ -12,6 +12,11 @@ import UIKit
 class MemeCollectionViewController: UICollectionViewController {
     // MARK: Constant
     private let reuseIdentifier = "MemeCollectionCell"
+    private let pushMemeDisplaySegueIdentifier = "pushMemeDisplay"
+    private let cellSpacing:CGFloat = 0.3
+    
+    // MARK: IBOutlet
+    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +27,23 @@ class MemeCollectionViewController: UICollectionViewController {
         navigationController?.navigationBarHidden = false
         tabBarController?.tabBar.hidden = false
         collectionView?.reloadData()
+        collectionViewFlowLayout.minimumInteritemSpacing = cellSpacing
+        collectionViewFlowLayout.minimumLineSpacing = cellSpacing
+        resizeCollectionLayout()
     }
 
 
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        resizeCollectionLayout()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == pushMemeDisplaySegueIdentifier) {
+            if let vc = segue.destinationViewController as? MemeDisplayViewController {
+                vc.meme = Meme.getMemeArray()[(collectionView?.indexPathsForSelectedItems()![0].row)!]
+            }
+        }
+    }
     // MARK: UICollectionViewDataSource
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -50,15 +69,22 @@ class MemeCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
 
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        presentImageEditViewControllerWithMeme(Meme.getMemeArray()[indexPath.row])
-    }
-    func presentImageEditViewController(){
-        presentImageEditViewControllerWithMeme(nil)
+        presentMemeDisplayViewController()
     }
     
-    func presentImageEditViewControllerWithMeme(meme:Meme? = nil) {
-        let vc = storyboard!.instantiateViewControllerWithIdentifier("ImageEditViewController") as! ImageEditViewController
-        vc.meme = meme
-        navigationController?.pushViewController(vc, animated: true)
+    // MARK: Private functions
+    
+    func presentImageEditViewController(){
+        ImageEditViewController.pushImageEditViewController(self)
+    }
+
+    func presentMemeDisplayViewController() {
+        performSegueWithIdentifier(pushMemeDisplaySegueIdentifier, sender: self)
+    }
+    
+    func resizeCollectionLayout() {
+        let count:CGFloat = view.frame.width > view.frame.height ? 5.0 : 3.0
+        let size:CGFloat = (view.frame.width - (count + 1) * cellSpacing) / count
+        collectionViewFlowLayout.itemSize = CGSize(width: size, height: size)
     }
 }

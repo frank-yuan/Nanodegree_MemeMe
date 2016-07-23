@@ -216,6 +216,13 @@ class ImageEditViewController: UIViewController, UIImagePickerControllerDelegate
     func handleSingleTap(sender:UITapGestureRecognizer){
         view.endEditing(true)
     }
+    
+    // MARK: static helper function
+    static func pushImageEditViewController(currentViewController:UIViewController, meme:Meme? = nil) {
+        let vc = currentViewController.storyboard!.instantiateViewControllerWithIdentifier("ImageEditViewController") as! ImageEditViewController
+        vc.meme = meme
+        currentViewController.navigationController?.pushViewController(vc, animated: true)
+    }
 
 }
 
