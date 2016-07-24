@@ -26,8 +26,8 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     // MARK: Constants
     
     enum ViewTags: Int {
-        case CameraButton = 1,
-        PhotoPickButton
+        case PhotoPickButton = 0,
+        CameraButton
     }
     
     let memeTextAttributes = [
@@ -179,7 +179,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func keyboardWillShow(notification: NSNotification) {
         if (bottomTextField.editing) {
-            view.frame.origin.y = viewOriginY - getKeyboardHeight(notification)
+            view.frame.origin.y = viewOriginY - getKeyboardHeight(notification) + (view.frame.maxY - bottomTextField.frame.maxY) / 2
         }
     }
     

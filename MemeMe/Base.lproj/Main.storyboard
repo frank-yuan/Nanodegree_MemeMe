@@ -197,7 +197,7 @@
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="e7b-U2-Qsb"/>
-                                    <barButtonItem systemItem="camera" id="PPv-l8-7ha">
+                                    <barButtonItem tag="1" systemItem="camera" id="PPv-l8-7ha">
                                         <connections>
                                             <action selector="onPickImage:" destination="BYZ-38-t0r" id="I2w-ma-rzo"/>
                                         </connections>
