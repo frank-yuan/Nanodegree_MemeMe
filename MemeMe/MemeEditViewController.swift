@@ -36,7 +36,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
     NSStrokeWidthAttributeName : -3.0
     ]
-    let textDel = ImageEditTextFieldDelegate()
+    let textDel = MemeEditTextFieldDelegate()
     
     // MARK: UIViewController overrides
     override func viewDidLoad() {
@@ -64,8 +64,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBarHidden = true
-        tabBarController?.tabBar.hidden = true
+        MemeUIHelper.hideBarFor(self, navigationBar: true, tabBar: true)
         // Subscribe to keyboard notifications to allow the view to raise when necessary
         subscribeToKeyboardNotifications()
     }
@@ -111,7 +110,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func onCancel(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+        dismiss()
     }
 
     @IBAction func onShare(sender: AnyObject) {
@@ -131,7 +130,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
         if (succeed)
         {
             storeCurrentMeme()
-            navigationController?.popViewControllerAnimated(true)
+            dismiss()
         }
     }
     
@@ -208,7 +207,7 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     
     func storeCurrentMeme() {
         if (meme != nil) {
-            Meme.sharedMemes.append(meme)
+            Meme.append(meme)
         }
         Meme.saveMemeToStorage()
     }
@@ -218,10 +217,10 @@ class MemeEditViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     // MARK: static helper function
-    static func pushMemeEditViewController(currentViewController:UIViewController, meme:Meme? = nil) {
-        let vc = currentViewController.storyboard!.instantiateViewControllerWithIdentifier("MemeEditViewController") as! MemeEditViewController
-        vc.meme = meme
-        currentViewController.navigationController?.pushViewController(vc, animated: true)
+
+    
+    func dismiss() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

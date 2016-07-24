@@ -1,5 +1,5 @@
 //
-//  ImageEditTextFieldDelegate.swift
+//  MemeEditTextFieldDelegate.swift
 //  MemeMe
 //
 //  Created by Xuan Yuan (Frank) on 7/20/16.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ImageEditTextFieldDelegate: NSObject, UITextFieldDelegate {
+class MemeEditTextFieldDelegate: NSObject, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(textField: UITextField) {
     }

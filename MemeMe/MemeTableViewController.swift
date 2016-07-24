@@ -12,31 +12,20 @@ class MemeTableViewController: UITableViewController {
 
     // MARK: Constants
     let tableViewCellIdentifier = "memeTableCell"
-    let tableViewSegueIdentifier = "pushMemeDisplay"
     
     // MARK: ViewController overrides
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = "Sent Memes"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
+        MemeUIHelper.setupNavigationItem(self, editable:true)
+        MemeUIHelper.setNavigationBarEditMode(self, isEditing:false)
+        
     }
+    
     override func viewWillAppear(animated: Bool) {
-        navigationController?.navigationBarHidden = false
-        tabBarController?.tabBar.hidden = false
+        MemeUIHelper.hideBarFor(self, navigationBar: false, tabBar: false)
         tableView.reloadData()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == tableViewSegueIdentifier)
-        {
-            if let ip = tableView.indexPathForSelectedRow {
-                if let vc = segue.destinationViewController as? MemeDetailViewController {
-                    vc.meme = Meme.getMemeArray()[ip.row]
-                }
-            }
-        }
-    }
     
     // MARK: TableView Delegates
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,18 +43,22 @@ class MemeTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        presentMemeDetailViewController()
+        MemeUIHelper.presentMemeDetailViewController(self, meme: Meme.getMemeArray()[indexPath.row])
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 100;
     }
-    // MARK: - Private functions
-    func presentMemeEditViewController(){
-        MemeEditViewController.pushMemeEditViewController(self)
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
     }
     
-    func presentMemeDetailViewController() {
-        performSegueWithIdentifier(tableViewSegueIdentifier, sender: self)
+    //For deleting the Meme
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (Meme.removeAt(indexPath.row)) {
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
+    
 }

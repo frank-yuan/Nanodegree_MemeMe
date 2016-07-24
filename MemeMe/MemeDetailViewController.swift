@@ -22,15 +22,13 @@ class MemeDetailViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        
         super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
         
-        navigationController?.navigationBarHidden = false
-        tabBarController?.tabBar.hidden = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(presentMemeEditViewController))
+        MemeUIHelper.hideBarFor(self, navigationBar: false, tabBar: true)
     }
     
     func presentMemeEditViewController() {
-        MemeEditViewController.pushMemeEditViewController(self, meme: meme)
+        MemeUIHelper.pushMemeEditViewController(self, meme: meme)
     }
 }

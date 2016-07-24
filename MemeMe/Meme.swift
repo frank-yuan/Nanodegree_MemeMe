@@ -15,9 +15,9 @@ struct Meme {
     let image: UIImage
     var memedImage: UIImage
     
-    static var sharedMemes = [Meme]()
+    private static var sharedMemes = [Meme]()
 
-    static let savedFileName = "meme.dat"
+    private static let savedFileName = "meme.dat"
     
     // MARK: Helper class for serialization as we cannot serialize a struct directly
     private class MemeHashtable : NSObject, NSCoding {
@@ -61,6 +61,18 @@ struct Meme {
     
     static func getMemeArray() -> [Meme]{
         return sharedMemes
+    }
+    
+    static func append(meme:Meme) {
+        sharedMemes.append(meme)
+    }
+    
+    static func removeAt(index:Int) -> Bool{
+        if (index >= 0 && index < sharedMemes.count) {
+            sharedMemes.removeAtIndex(index)
+            return true
+        }
+        return false
     }
     
     // TODO: this method is very very time consuming
