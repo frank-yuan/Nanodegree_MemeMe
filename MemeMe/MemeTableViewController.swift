@@ -22,6 +22,7 @@ class MemeTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         MemeUIHelper.hideBarFor(self, navigationBar: false, tabBar: false)
         tableView.reloadData()
     }
